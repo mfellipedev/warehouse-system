@@ -28,7 +28,3 @@ Um sistema de gerenciamento de estoque desenvolvido em Java puro, capaz de supor
 ## 👨‍💻 Autor
 
 **Matheus Fellipe**
-
----
-
-Cola esse conteúdo no README e me mostra quando estiver no ar! 🙂
