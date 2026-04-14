@@ -17,6 +17,26 @@ public class Inventory {
         this.quantity = quantity;
     }
 
+    public int availableSpace() {
+        int space = (this.address.getLevel() * 10) + 10 - this.quantity;
+        if (space <= 0) {
+            return 0;
+        }
+        return space;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
     private void validQuantity(int quantity) {
         int limitLevel = (this.address.getLevel() * 10) + 10;
         if (quantity <= 0) {
@@ -24,8 +44,22 @@ public class Inventory {
         } else if (quantity > limitLevel) {
             throw new IllegalArgumentException("Quantidade maior que a suportada pelo nível atual");
         }
+    }
 
+    public int addQuantity(int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("A quantidade minima deve ser maior que 0");
+        }
+        if (availableSpace() <= 0) {
+            throw new IllegalArgumentException("Não há espaço disponível no endereço informado");
+        }
+        int space = availableSpace();
+        this.quantity += Math.min(quantity, space);
+        return Math.max(0, quantity - space); //Retorna o restante do armazenamento
+    }
 
+    protected int updatingBalance(int quantity) {
+        return this.quantity -= quantity;
     }
 
 
