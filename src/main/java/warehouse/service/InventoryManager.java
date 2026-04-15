@@ -30,7 +30,17 @@ public class InventoryManager {
     }
 
     public Inventory getInventory(String id) {
-        return this.inventory.get(id);
+        Inventory inventoryReturn = this.inventory.get(id);
+        if (inventoryReturn == null) {
+            throw new IllegalArgumentException("Não existe nenhum produto armazenado no endereço");
+        }
+        return inventoryReturn;
+    }
+
+    public Inventory findInventory(String id) {
+        Inventory findInventory = this.inventory.get(id);
+
+        return findInventory;
     }
 
     public int remove(String id, Product product, int quantity) {
@@ -39,9 +49,6 @@ public class InventoryManager {
             throw new IllegalArgumentException("Verifique se o endereço ou produto estão corretos");
         }
         Inventory inventory1 = getInventory(address.getId());
-        if (inventory1 == null) {
-            throw new IllegalArgumentException("Não existe um produto armazenado no endereço");
-        }
         if (quantity <= 0 || inventory1.getQuantity() < quantity) {
             throw new IllegalArgumentException("Quantidade invalida para remoção");
         } else if (!inventory1.getProduct().equals(product)) {
@@ -52,7 +59,25 @@ public class InventoryManager {
             this.inventory.remove(address.getId());
         }
         return status;
+    }
 
+    public boolean transfer(String origin, String dest, int quantity) {
+        Address originAddress = this.warehouse.getAddress(origin); //Validacao de estado dentro do metodo getAddress
+        Address destAddress = this.warehouse.getAddress(dest);
+        Inventory originInventory = getInventory(originAddress.getId());
+        if (findInventory(dest) == null) {
+            if (originInventory.spaceAddress(destAddress) < quantity){
+                throw new IllegalArgumentException("Quantidade maior que o suportado pelo endereço destino");
+            }
+        }
+        Inventory destInventory = findInventory(dest);
+        if (destInventory != null && !destInventory.getProduct().equals(originInventory.getProduct())) {
+            //Verificamos se o produto do endereço destinado é o mesmo que o da origem
+            throw new IllegalArgumentException("Não é possível armazenar dois produtos diferentes no mesmo endereço");
+        }
+        store(dest,originInventory.getProduct(),quantity);
+        remove(origin,originInventory.getProduct(),quantity);
+        return true;
     }
 
 
