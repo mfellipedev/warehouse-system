@@ -38,8 +38,4 @@ public class WarehouseQuery {
         return listProductInStock;
     }
 
-    //O que preciso para conseguir retornar uma lista com os endereços em que o produto está armazenado, e a sua quantidade
-    //Preciso buscar os inventory armazenados no inventoryManager, e com eles realizar uma busca de getProduct, comparando com o produto buscado
-    //Sempre que o produto for o mesmo, pegamos o ID do endereço + Quantidade
-    //podemos entao retornar ambos, com a key (ID) , e atraves do inventory, acessar a quantidade e retornar
 }
