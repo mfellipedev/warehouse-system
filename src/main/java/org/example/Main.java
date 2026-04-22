@@ -1,17 +1,39 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import warehouse.cli.CLI;
+import warehouse.domain.Warehouse;
+import warehouse.service.InventoryManager;
+import warehouse.service.WarehouseQuery;
+
+import java.util.Scanner;
+
 public class Main {
     static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
+        Scanner scanner = new Scanner(System.in);
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
+        CLI.welcomeMessage();
+
+        System.out.println("Informe a quantidade de ruas no armazém: (Somente valores entre 1 e 26)");
+        int quantityStreets = Integer.parseInt(scanner.nextLine());
+        System.out.println("Informe a quantidade de níveis: (Somente valores entre 1 e 3)");
+        int quantityLevels = Integer.parseInt(scanner.nextLine());
+        System.out.println("Informe a quantidade de colunas: (Somente valores entre 1 e 10)");
+        int quantityColumns = Integer.parseInt(scanner.nextLine());
+
+
+        try {
+            Warehouse warehouse = new Warehouse(quantityStreets, quantityLevels, quantityColumns);
+            InventoryManager inventoryManager = new InventoryManager(warehouse);
+            WarehouseQuery warehouseQuery = new WarehouseQuery(inventoryManager);
+            CLI cli = new CLI(inventoryManager, warehouseQuery);
+
+            cli.menu();
+            cli.start();
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
+
+
     }
 }
