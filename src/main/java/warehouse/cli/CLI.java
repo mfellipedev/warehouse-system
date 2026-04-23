@@ -49,6 +49,7 @@ public class CLI {
 
     public void start() {
         while (true) {
+            menu();
             System.out.println("Escolha uma opção: ");
             String option = scanner.nextLine();
             if (!validOption(option)) {
@@ -69,7 +70,14 @@ public class CLI {
                     removerSaldo();
                     continue;
                 case 4:
-
+                    buscarProduto();
+                    continue;
+                case 5:
+                    relatorioEnderecos();
+                    continue;
+                case 6:
+                    relatorioRuas();
+                    continue;
             }
         }
     }
@@ -135,9 +143,34 @@ public class CLI {
         scanner.nextLine();
 
         try {
-            System.out.println("Quantidade Removida: " + inventoryManager.remove(id, sku, quantity));
+            System.out.println("Saldo Restante: " + inventoryManager.remove(id, sku, quantity) + "\n" +
+            "Saldo Removido: " + quantity);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void buscarProduto() {
+        System.out.println("SKU Buscado: ");
+        String sku = scanner.nextLine();
+
+        try {
+            System.out.println(warehouseQuery.queryProductInStock(sku));
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void relatorioEnderecos() {
+        System.out.println("Todos os endereços serão exibidos!");
+        System.out.println("╠══════════════════════════════════╣");
+        warehouseQuery.addressesQuery()
+                .forEach(System.out::println);
+    }
+
+    public void relatorioRuas(){
+        System.out.println("Ruas Disponíveis: ");
+        warehouseQuery.streetsQuery().stream()
+                .forEach(System.out::println);
     }
 }
