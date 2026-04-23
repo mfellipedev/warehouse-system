@@ -3,10 +3,7 @@ package warehouse.service;
 import warehouse.domain.Address;
 import warehouse.domain.Street;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WarehouseQuery {
     private final InventoryManager inventoryManager;
@@ -16,8 +13,10 @@ public class WarehouseQuery {
     }
 
     public List<Address> addressesQuery() {
-        Map<String, Address> addresses = this.inventoryManager.getWarehouse().returnAddresses();
+        TreeMap<String, Address> addresses = this.inventoryManager.getWarehouse().returnAddresses();
         List<Address> listOfAdresses = new ArrayList<>(addresses.values());
+
+        Collections.sort(listOfAdresses, Comparator.comparing((Address a) -> a.getId().split("-")[0]).thenComparing((Address a) -> Integer.valueOf(a.getId().split("-")[1])));
         return listOfAdresses;
     }
 
@@ -26,13 +25,13 @@ public class WarehouseQuery {
         return listStreets;
     }
 
-    public List<String> queryProductsInStock(String product) {
+    public List<String> queryProductInStock(String product) {
         Map<String, Inventory> inventory = new HashMap<>(this.inventoryManager.returnInventory());
         List<String> listProductInStock = new ArrayList<>();
 
         for (Inventory inv : inventory.values()) {
             if (inv.getProduct().sku().equals(product)) {
-                listProductInStock.add(inv.getAddress().getId() + "- " + inv.getQuantity());
+                listProductInStock.add("ID: " + inv.getAddress().getId() + " | " + "Quantidade: " + inv.getQuantity());
             }
         }
         return listProductInStock;
