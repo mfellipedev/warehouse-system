@@ -16,7 +16,11 @@ public class WarehouseQuery {
         TreeMap<String, Address> addresses = this.inventoryManager.getWarehouse().returnAddresses();
         List<Address> listOfAdresses = new ArrayList<>(addresses.values());
 
-        Collections.sort(listOfAdresses, Comparator.comparing((Address a) -> a.getId().split("-")[0]).thenComparing((Address a) -> Integer.valueOf(a.getId().split("-")[1])));
+        Collections.sort(listOfAdresses, Comparator
+                .comparing((Address a) -> a.getId().split("-")[0])
+                .thenComparing((Address a) -> Integer.valueOf(a.getId().split("-")[1]))
+                .thenComparing((Address a) -> Integer.valueOf(a.getId().split("-")[2])));
+
         return listOfAdresses;
     }
 
