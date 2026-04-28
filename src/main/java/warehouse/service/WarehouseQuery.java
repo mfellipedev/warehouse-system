@@ -16,10 +16,7 @@ public class WarehouseQuery {
         TreeMap<String, Address> addresses = this.inventoryManager.getWarehouse().returnAddresses();
         List<Address> listOfAdresses = new ArrayList<>(addresses.values());
 
-        Collections.sort(listOfAdresses, Comparator
-                .comparing((Address a) -> a.getId().split("-")[0])
-                .thenComparing((Address a) -> Integer.valueOf(a.getId().split("-")[1]))
-                .thenComparing((Address a) -> Integer.valueOf(a.getId().split("-")[2])));
+        Collections.sort(listOfAdresses, Comparator.comparing((Address a) -> a.getStreet().street()).thenComparingInt(Address::getLevel).thenComparingInt(Address::getColumnNumber));
 
         return listOfAdresses;
     }
@@ -41,4 +38,17 @@ public class WarehouseQuery {
         return listProductInStock;
     }
 
+    public Map<String, String> completeAdressesQuery() {
+        List<Address> listAddresses = this.addressesQuery();
+        LinkedHashMap<String, String> mapAddresses = new LinkedHashMap<>();
+        for (Address a : listAddresses) {
+            Inventory inventory = inventoryManager.findInventory(a.getId());
+            if (inventory != null) {
+                mapAddresses.put(a.getId(), inventory.getProduct().toString() + " | Quantidade: "+  inventory.getQuantity());
+            } else {
+                mapAddresses.put(a.getId(), "Endereço Vazio");
+            }
+        }
+        return mapAddresses;
+    }
 }

@@ -4,6 +4,7 @@ import warehouse.domain.Product;
 import warehouse.service.InventoryManager;
 import warehouse.service.WarehouseQuery;
 
+import java.util.Map;
 import java.util.Scanner;
 
 public class CLI {
@@ -155,7 +156,7 @@ public class CLI {
         String sku = scanner.nextLine();
 
         try {
-            System.out.println(warehouseQuery.queryProductInStock(sku));
+            warehouseQuery.queryProductInStock(sku).stream().forEach(System.out::println);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -163,9 +164,11 @@ public class CLI {
 
     public void relatorioEnderecos() {
         System.out.println("Todos os endereços serão exibidos!");
-        System.out.println("╠══════════════════════════════════╣");
-        warehouseQuery.addressesQuery()
-                .forEach(System.out::println);
+        System.out.println("╠══════════════════════════════════════════════════════════════════════════════════════════╣");
+        Map<String,String> addresses = warehouseQuery.completeAdressesQuery();
+        addresses.forEach((id,status) -> {
+            System.out.printf("║ Endereço: %-12s ║ Status: %-55s ║%n", id, status);
+        });
     }
 
     public void relatorioRuas(){
