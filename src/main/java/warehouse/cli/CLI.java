@@ -50,6 +50,7 @@ public class CLI {
         System.out.println("║4. Buscar Produto                 ║");
         System.out.println("║5. Relatório De Endereços         ║");
         System.out.println("║6. Histórico De Transação         ║");
+        System.out.println("║7. DashBoard Do Armazém         ║");
         System.out.println("║0. Sair                           ║");
         System.out.println("╚══════════════════════════════════╝");
     }
@@ -85,6 +86,10 @@ public class CLI {
                 case 6:
                     logs();
                     continue;
+                case 7:
+                    dashboard();
+                    continue;
+
             }
         }
     }
@@ -92,7 +97,7 @@ public class CLI {
     private boolean validOption(String option) {
         try {
             int selectedOption = Integer.parseInt(option);
-            if (selectedOption > 6 || selectedOption < 0) {
+            if (selectedOption > 7 || selectedOption < 0) {
                 System.out.println("Opção Invalida! \nEncerrando o programa");
                 return false;
             }
@@ -222,5 +227,14 @@ public class CLI {
 
     private void imprimirRodape() {
         System.out.println("=".repeat(95));
+    }
+
+    private void dashboard() {
+        System.out.println("\n========================================");
+        System.out.println("             DASHBOARD (WMS)             ");
+        System.out.println("========================================");
+        System.out.println();
+        System.out.println(inventoryManager.getDashboard());
+        System.out.println("========================================\n");
     }
 }
