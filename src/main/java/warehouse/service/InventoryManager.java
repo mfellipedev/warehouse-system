@@ -139,4 +139,19 @@ public class InventoryManager {
         this.products.put(sku, product);
     }
 
+    public String getDashboard() {
+        int totalProducts = this.products.size();
+        int totalUnits = 0;
+        int occupiedAddresses = this.inventory.size();
+
+        for (Inventory inv : this.inventory.values()) {
+            totalUnits += inv.getQuantity();
+        }
+
+        return String.format(
+                "Total de produtos cadastrados: %d\nEndereços Ocupados: %d\nTotal de Unidades: %d\n",
+                totalProducts, occupiedAddresses, totalUnits
+        );
+    }
+
 }
