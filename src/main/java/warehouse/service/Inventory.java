@@ -46,6 +46,10 @@ public class Inventory {
         }
     }
 
+    public int spaceAddress(Address address) {
+        return (address.getLevel() * 10) + 10;
+    }
+
     public int addQuantity(int quantity) {
         if (quantity <= 0) {
             throw new IllegalArgumentException("A quantidade minima deve ser maior que 0");
@@ -59,7 +63,8 @@ public class Inventory {
     }
 
     protected int updatingBalance(int quantity) {
-        return this.quantity -= quantity;
+        this.quantity -= quantity;
+        return Math.max(this.quantity ,- quantity);
     }
 
 

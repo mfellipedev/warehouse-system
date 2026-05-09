@@ -114,7 +114,9 @@ public class CLI {
         scanner.nextLine();
 
         try {
-            inventoryManager.store(id, new Product(name, sku), quantity);
+            Product product = new Product(name, sku);
+            inventoryManager.store(id, product, quantity);
+            inventoryManager.addProduct(product.sku(), product);
             System.out.println("Armazenamento realizado com sucesso!");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());

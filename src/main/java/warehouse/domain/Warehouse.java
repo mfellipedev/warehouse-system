@@ -1,17 +1,15 @@
 package warehouse.domain;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Warehouse {
-    private final HashMap<String, Address> addresses;
+    private final TreeMap<String, Address> addresses;
     private final List<Street> streets;
     private final List<Level> levels;
     private final List<Column> columns;
 
     public Warehouse(int quantityStreet, int quantityLevel, int quantityColumn) {
-        this.addresses = new HashMap<>();
+        this.addresses = new TreeMap<>();
         this.streets = new ArrayList<>();
         this.levels = new ArrayList<>();
         this.columns = new ArrayList<>();
@@ -21,9 +19,17 @@ public class Warehouse {
         generateAddress();
     }
 
+    public Address getAddress(String id) {
+        Address address = this.addresses.get(id);
+        if (address == null) {
+            throw new IllegalArgumentException("O endereço não pode ser encontrado!");
+        }
+        return address;
+    }
+
     private void generateStreets(int quantity) {
         if (quantity > 26 || quantity < 1) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Quantidade de ruas invalida!");
         }
         char lyrics = 'A';
         for (int i = 0; i < quantity; i++) {
@@ -34,7 +40,7 @@ public class Warehouse {
 
     private void generateLevels(int quantity) {
         if (quantity < 1 || quantity > 3) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Informe uma quantidade valida de níveis");
         }
         for (int i = 1; i <= quantity; i++) {
             levels.add(new Level(i));
@@ -43,7 +49,7 @@ public class Warehouse {
 
     private void generateColumns(int quantity) {
         if (quantity < 1 || quantity > 10) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Informe uma quantidade valida de colunas");
         }
         for (int i = 1; i <= quantity; i++) {
             columns.add(new Column(i));
@@ -71,4 +77,15 @@ public class Warehouse {
     public int quantityOfAddress() {
         return this.addresses.size();
     }
+
+    public TreeMap<String, Address> returnAddresses() {
+        TreeMap<String, Address> copyAddresses = new TreeMap<>(this.addresses);
+        return copyAddresses;
+    }
+    public List<Street> returnStreets(){
+        List<Street> listStreets = new ArrayList<>(this.streets);
+        Collections.sort(listStreets,(s1,s2) -> s1.street().compareTo(s2.street()));
+        return listStreets;
+    }
+
 }

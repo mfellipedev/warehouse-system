@@ -33,7 +33,7 @@ public class Main {
         while (true) {
             try {
                 System.out.println(message);
-                int value = Integer.valueOf(scanner.nextLine());
+                int value = Integer.parseInt(scanner.nextLine());
 
                 if (value < min || value > max) {
                     throw new IllegalArgumentException("Verifique se os valores atendem as regras!");

@@ -32,17 +32,24 @@ public class Address {
         return column;
     }
 
+    public Street getStreet() {return street;}
+
+    public int getColumnNumber() {
+        return column.getColumn();
+    }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Address address = (Address) o;
-        return Objects.equals(street, address.street) && Objects.equals(column, address.column) && Objects.equals(level, address.level) && Objects.equals(id, address.id);
+        return Objects.equals(this.street, address.street)
+                && Objects.equals(this.column, address.column)
+                && Objects.equals(this.level, address.level);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(street, column, level, id);
+        return Objects.hash(street, column, level);
     }
 
     @Override

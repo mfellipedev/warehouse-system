@@ -39,7 +39,7 @@ public class ProductTest {
 
     @Test
     @DisplayName("SKU não pode conter mais que 10 caracteres")
-    void shouldThrowWhenSkuLengthGreatheThan10() {
+    void shouldthrowwhenskulengthgreathethan10() {
         assertThrows(IllegalArgumentException.class, () -> new Product("Moletom", "12345678901"));
     }
 

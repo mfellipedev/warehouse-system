@@ -45,20 +45,20 @@ public class InventoryManagerTest {
 
     @Test
     void shouldNotRemoveWhenAddressIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> inventoryManager.remove(null, product, 20));
+        assertThrows(IllegalArgumentException.class, () -> inventoryManager.remove(null, "2023402342", 20));
     }
 
     @Test
     void shouldNotRemoveWhenProductIsNull() {
         product = null;
-        assertThrows(IllegalArgumentException.class, () -> inventoryManager.remove("A-1-1", product, 20));
+        assertThrows(IllegalArgumentException.class, () -> inventoryManager.remove("A-1-1", null, 20));
     }
 
     @Test
     void shouldNotRemoveWhenQuantityIsGreatherThanBalance() {
         Product productTest = new Product("Cinto", "202903223");
         inventoryManager.store("A-1-1", productTest, 20);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> inventoryManager.remove("A-1-1", productTest, 21));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> inventoryManager.remove("A-1-1", "202903223", 21));
         assertEquals("Quantidade invalida para remoção", exception.getMessage());
     }
 
@@ -67,7 +67,7 @@ public class InventoryManagerTest {
         Product productTest = new Product("Cinto", "202903223");
         Product productDifferent = new Product("Meia", "202912901");
         inventoryManager.store("A-1-1", productTest, 20);
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> inventoryManager.remove("A-1-1", productDifferent, 20));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> inventoryManager.remove("A-1-1", "202912901", 20));
         assertEquals("O produto não pode ser diferente do armazenado", exception.getMessage());
     }
 
@@ -75,7 +75,7 @@ public class InventoryManagerTest {
     void shouldUpdatingBalance() {
         Product productTest = new Product("Cinto", "202903223");
         inventoryManager.store("A-1-1", productTest, 20);
-        inventoryManager.remove("A-1-1", productTest, 19);
+        inventoryManager.remove("A-1-1", "202903223", 19);
         assertEquals(1, this.inventoryManager.getInventory("A-1-1").getQuantity());
     }
 
@@ -83,7 +83,7 @@ public class InventoryManagerTest {
     void shouldDeleteInventoryWhenBalanceEqualsToZero() {
         Product productTest = new Product("Cinto", "202903223");
         inventoryManager.store("A-1-1", productTest, 20);
-        inventoryManager.remove("A-1-1", productTest, 20);
+        inventoryManager.remove("A-1-1", "202903223", 20);
         assertNull(this.inventoryManager.getInventory("A-1-1"));
     }
 
@@ -97,6 +97,17 @@ public class InventoryManagerTest {
     }
 
     @Test
+    void shouldTransferWhenProductEquals() {
+        Product productTest = new Product("Cinto", "202903223");
+        inventoryManager.store("A-1-1", productTest, 20);
+        inventoryManager.store("A-1-2", productTest, 10);
+        inventoryManager.transfer("A-1-1", "A-1-2", 10);
+        assertEquals(20,this.inventoryManager.getInventory("A-1-2").getQuantity());
+        assertEquals(10,this.inventoryManager.getInventory("A-1-1").getQuantity());
+    }
+
+
+    @Test
     void shouldNotTransferWhenQuantityExceedsAvailableSpace() {
         Product productTest = new Product("Cinto", "202903223");
         inventoryManager.store("A-1-1", productTest, 20);
@@ -106,8 +117,19 @@ public class InventoryManagerTest {
 
     @Test
     void shouldNotTransferWhenParametersIsNull() {
-        Address address1 = null;
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> inventoryManager.transfer("KL-1-1", "A-2-2", 20));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> inventoryManager.transfer(null, "A-2-2", 20));
+        assertEquals("O endereço não pode ser encontrado!",exception.getMessage());
+    }
+
+    @Test
+    void shouldNotTransferWhenAddressNotExist() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> inventoryManager.transfer("AB-1-2", "A-2-2", 20));
+        assertEquals("O endereço não pode ser encontrado!",exception.getMessage());
+    }
+
+    @Test
+    void shouldNotTransferWhenDestAddressNotExist() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> inventoryManager.transfer("A-1-2", "AZ-2-2", 20));
         assertEquals("O endereço não pode ser encontrado!",exception.getMessage());
     }
 
@@ -115,6 +137,6 @@ public class InventoryManagerTest {
     void shouldTransfer(){
         Product productTest = new Product("Cinto", "202903223");
         inventoryManager.store("A-1-1", productTest, 20);
-        assertTrue(inventoryManager.transfer("A-1-1","A-2-3",20));
+        assertTrue(inventoryManager.transfer("A-1-1","A-2-1",20));
     }
 }

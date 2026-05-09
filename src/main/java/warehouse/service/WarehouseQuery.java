@@ -14,16 +14,15 @@ public class WarehouseQuery {
 
     public List<Address> addressesQuery() {
         TreeMap<String, Address> addresses = this.inventoryManager.getWarehouse().returnAddresses();
-        List<Address> listOfAdresses = new ArrayList<>(addresses.values());
+        List<Address> listOfAddresses = new ArrayList<>(addresses.values());
 
-        Collections.sort(listOfAdresses, Comparator.comparing((Address a) -> a.getStreet().street()).thenComparingInt(Address::getLevel).thenComparingInt(Address::getColumnNumber));
+        Collections.sort(listOfAddresses, Comparator.comparing((Address a) -> a.getStreet().street()).thenComparingInt(Address::getLevel).thenComparingInt(Address::getColumnNumber));
 
-        return listOfAdresses;
+        return listOfAddresses;
     }
 
     public List<Street> streetsQuery() {
-        List<Street> listStreets = new ArrayList<>(this.inventoryManager.getWarehouse().returnStreets());
-        return listStreets;
+        return new ArrayList<>(this.inventoryManager.getWarehouse().returnStreets());
     }
 
     public List<String> queryProductInStock(String product) {
@@ -38,7 +37,7 @@ public class WarehouseQuery {
         return listProductInStock;
     }
 
-    public Map<String, String> completeAdressesQuery() {
+    public Map<String, String> completeAddressesQuery() {
         List<Address> listAddresses = this.addressesQuery();
         LinkedHashMap<String, String> mapAddresses = new LinkedHashMap<>();
         for (Address a : listAddresses) {
