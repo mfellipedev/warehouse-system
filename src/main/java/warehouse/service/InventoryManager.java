@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InventoryManager {
-    private final HashMap<String, Inventory> inventory;
-    private final Warehouse warehouse;
+    private HashMap<String, Inventory> inventory;
+    private Warehouse warehouse;
     private LogManager logManager;
     private HashMap<String, Product> products;
 
@@ -22,6 +22,8 @@ public class InventoryManager {
         this.products = new HashMap<>();
 
     }
+
+    protected InventoryManager() {}
 
     public Warehouse getWarehouse() {
         return warehouse;

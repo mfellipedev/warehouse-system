@@ -11,6 +11,9 @@ public class LogQuery {
         this.logManager = logManager;
     }
 
+    protected LogQuery() {
+    }
+
     public List<TransactionLog> getTransactionLogs() {
         return logManager.getTransactionLogs();
     }

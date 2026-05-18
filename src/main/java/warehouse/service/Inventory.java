@@ -6,8 +6,8 @@ import warehouse.domain.Product;
 import java.util.Objects;
 
 public class Inventory {
-    private final Address address;
-    private final Product product;
+    private Address address;
+    private Product product;
     private int quantity;
 
     public Inventory(Address address, Product product, int quantity) {
@@ -15,6 +15,9 @@ public class Inventory {
         this.product = Objects.requireNonNull(product, "Um produto não pode ser null");
         validQuantity(quantity);
         this.quantity = quantity;
+    }
+
+    protected Inventory() {
     }
 
     public int availableSpace() {
@@ -64,7 +67,7 @@ public class Inventory {
 
     protected int updatingBalance(int quantity) {
         this.quantity -= quantity;
-        return Math.max(this.quantity ,- quantity);
+        return Math.max(this.quantity, -quantity);
     }
 
 

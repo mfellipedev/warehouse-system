@@ -2,16 +2,26 @@ package org.example;
 
 import warehouse.cli.CLI;
 import warehouse.domain.Warehouse;
+import warehouse.service.DataStorage;
 import warehouse.service.InventoryManager;
 import warehouse.service.WarehouseQuery;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
-    static void main() {
+    static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        DataStorage dataStorage = new DataStorage();
+        InventoryManager inventoryManager;
 
-        CLI.welcomeMessage();
+        try {
+            inventoryManager = dataStorage.load();
+            System.out.println("Sistema recuperado com sucesso");
+
+        } catch (IOException e) {
+            System.out.println("Não foi possível encontrar dados do armazém");
+            CLI.welcomeMessage();
 
             int quantityStreets = read(scanner, "Informe a quantidade de ruas no armazém: (Somente valores entre 1 e 26)", 1, 26);
             int quantityLevels = read(scanner, "Informe a quantidade de níveis: (Somente valores entre 1 e 3)", 1, 3);
@@ -19,12 +29,14 @@ public class Main {
 
 
             Warehouse warehouse = new Warehouse(quantityStreets, quantityLevels, quantityColumns);
-            InventoryManager inventoryManager = new InventoryManager(warehouse);
-            WarehouseQuery warehouseQuery = new WarehouseQuery(inventoryManager);
-            CLI cli = new CLI(inventoryManager, warehouseQuery);
+            inventoryManager = new InventoryManager(warehouse);
+        }
 
-            cli.start();
 
+        WarehouseQuery warehouseQuery = new WarehouseQuery(inventoryManager);
+        CLI cli = new CLI(inventoryManager, warehouseQuery);
+
+        cli.start();
 
 
     }

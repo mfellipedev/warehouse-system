@@ -3,10 +3,10 @@ package warehouse.domain;
 import java.util.*;
 
 public class Warehouse {
-    private final TreeMap<String, Address> addresses;
-    private final List<Street> streets;
-    private final List<Level> levels;
-    private final List<Column> columns;
+    private  TreeMap<String, Address> addresses;
+    private  List<Street> streets;
+    private  List<Level> levels;
+    private  List<Column> columns;
 
     public Warehouse(int quantityStreet, int quantityLevel, int quantityColumn) {
         this.addresses = new TreeMap<>();
@@ -17,6 +17,28 @@ public class Warehouse {
         generateLevels(quantityLevel);
         generateColumns(quantityColumn);
         generateAddress();
+    }
+
+    protected Warehouse() {
+        this.addresses = new TreeMap<>();
+        this.streets = new ArrayList<>();
+        this.levels = new ArrayList<>();
+        this.columns = new ArrayList<>();}
+
+    public TreeMap<String, Address> getAddresses() {
+        return addresses;
+    }
+
+    public List<Street> getStreets() {
+        return streets;
+    }
+
+    public List<Column> getColumns() {
+        return columns;
+    }
+
+    public List<Level> getLevels() {
+        return levels;
     }
 
     public Address getAddress(String id) {
@@ -82,9 +104,10 @@ public class Warehouse {
         TreeMap<String, Address> copyAddresses = new TreeMap<>(this.addresses);
         return copyAddresses;
     }
-    public List<Street> returnStreets(){
+
+    public List<Street> returnStreets() {
         List<Street> listStreets = new ArrayList<>(this.streets);
-        Collections.sort(listStreets,(s1,s2) -> s1.street().compareTo(s2.street()));
+        Collections.sort(listStreets, (s1, s2) -> s1.street().compareTo(s2.street()));
         return listStreets;
     }
 

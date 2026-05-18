@@ -2,11 +2,9 @@ package warehouse.cli;
 
 import warehouse.domain.Product;
 import warehouse.domain.TransactionLog;
-import warehouse.service.InventoryManager;
-import warehouse.service.LogManager;
-import warehouse.service.LogQuery;
-import warehouse.service.WarehouseQuery;
+import warehouse.service.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -16,12 +14,14 @@ public class CLI {
     private final WarehouseQuery warehouseQuery;
     private final Scanner scanner;
     private LogQuery logQuery;
+    private DataStorage dataStorage;
 
     public CLI(InventoryManager inventoryManager, WarehouseQuery warehouseQuery) {
         this.inventoryManager = inventoryManager;
         this.warehouseQuery = warehouseQuery;
         this.scanner = new Scanner(System.in);
         this.logQuery = new LogQuery(inventoryManager.returnLogManager());
+        this.dataStorage = new DataStorage();
     }
 
     public static void welcomeMessage() {
@@ -31,13 +31,6 @@ public class CLI {
         System.out.println("║     Aguarde um momento       ║");
         System.out.println("╚══════════════════════════════╝");
 
-        try {
-            Thread.sleep(3000);
-            System.out.print("\033[H\033[2J");
-            System.out.flush();
-        } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
-        }
     }
 
     public void menu() {
@@ -123,6 +116,7 @@ public class CLI {
             inventoryManager.store(id, product, quantity);
             inventoryManager.addProduct(product.sku(), product);
             System.out.println("Armazenamento realizado com sucesso!");
+            salvarEstado();
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -141,6 +135,7 @@ public class CLI {
             boolean transfer = inventoryManager.transfer(origin, dest, quantity);
             if (transfer) {
                 System.out.println("Transferência realizada com sucesso!");
+                salvarEstado();
             }
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
@@ -159,6 +154,7 @@ public class CLI {
         try {
             System.out.println("Saldo Restante: " + inventoryManager.remove(id, sku, quantity) + "\n" +
                     "Saldo Removido: " + quantity);
+            salvarEstado();
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
@@ -236,5 +232,14 @@ public class CLI {
         System.out.println();
         System.out.println(inventoryManager.getDashboard());
         System.out.println("========================================\n");
+    }
+
+    private void salvarEstado(){
+        try {
+            dataStorage.save(this.inventoryManager);
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar o estado!");
+            e.printStackTrace();
+        }
     }
 }

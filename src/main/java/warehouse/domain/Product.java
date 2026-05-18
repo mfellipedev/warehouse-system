@@ -1,14 +1,19 @@
 package warehouse.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public record Product(String name, String sku) {
+    @JsonCreator
+    public Product(
+            @JsonProperty("name") String name,
+            @JsonProperty("sku") String sku
+    ) {
+        this.name = (name != null) ? name.trim() : null;
+        this.sku = sku;
 
-    public Product {
-        if (name != null) {
-            name = name.trim();
-        }
-
-        validName(name);
-        validSKU(sku);
+        validName(this.name);
+        validSKU(this.sku);
     }
 
     public String getName() {

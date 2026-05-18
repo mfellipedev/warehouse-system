@@ -1,12 +1,14 @@
 package warehouse.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Objects;
 
 public class Address {
-    private final Street street;
-    private final Column column;
-    private final Level level;
-    private final String id;
+    private Street street;
+    private Column column;
+    private Level level;
+    private String id;
 
     public Address(Street street, Column column, Level level) {
 
@@ -14,6 +16,9 @@ public class Address {
         this.column = Objects.requireNonNull(column, "A coluna não pode ser null");
         this.level = Objects.requireNonNull(level, "O nível não pode ser null");
         this.id = generateID();
+    }
+
+    protected Address() {
     }
 
     private String generateID() {
@@ -32,8 +37,11 @@ public class Address {
         return column;
     }
 
-    public Street getStreet() {return street;}
+    public Street getStreet() {
+        return street;
+    }
 
+    @JsonIgnore
     public int getColumnNumber() {
         return column.getColumn();
     }
